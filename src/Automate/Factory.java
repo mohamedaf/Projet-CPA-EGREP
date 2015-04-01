@@ -145,4 +145,47 @@ public class Factory {
 	return a;
     }
 
+    /**************************************************************************/
+    /* Essayer de faire fonctionner EGREP pour non deterministe avant de ***** */
+    /*********************** passer a cette partie ****************************/
+    /**************************************************************************/
+
+    /*
+     * Prend un automate non deterministe et retourne une minimisation de cet
+     * automate deterministe
+     */
+    public static Automate getAutomateDeterministe(Automate a) {
+	/* TO DO */
+	return null;
+    }
+
+    /* Verifie que l'automate est complet */
+    public static Boolean estAutomateComplet(Automate a) {
+	/* TO DO */
+	return false;
+    }
+
+    /* Supprime les epsilon transitions dans l'automate */
+    public static Automate removeEpsilonTransition(Automate a) {
+	/* TO DO */
+	return null;
+    }
+
+    /*
+     * Retourne l'automate reconaissant le langage mirroir de l'automate donnee
+     * en argument
+     */
+    public static Automate getAutomateMirroir(Automate a) {
+	/* TO DO */
+	return null;
+    }
+
+    /*
+     * Prend un automate deterministe et retourne une minimisation de cet
+     * automate
+     */
+    public static Automate minimisation(Automate a) {
+	/* TO DO */
+	return null;
+    }
 }

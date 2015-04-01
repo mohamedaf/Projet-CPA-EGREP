@@ -14,10 +14,6 @@ public class Etat {
 	this.transitions = transitions;
     }
 
-    public ArrayList<Transition> getTransitions() {
-	return transitions;
-    }
-
     public void setTransitions(ArrayList<Transition> transitions) {
 	this.transitions = transitions;
     }

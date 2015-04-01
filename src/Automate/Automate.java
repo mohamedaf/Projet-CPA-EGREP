@@ -24,8 +24,12 @@ public class Automate {
 	this.initial = initial;
     }
 
-    public ArrayList<Etat> getFinaux() {
-	return finaux;
+    public ArrayList<String> getAlphabetList() {
+	return alphabet;
+    }
+
+    public void setAlphabet(ArrayList<String> alphabet) {
+	this.alphabet = alphabet;
     }
 
     public void setFinaux(ArrayList<Etat> finaux) {
