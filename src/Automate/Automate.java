@@ -9,11 +9,11 @@ public class Automate {
     private ArrayList<String> alphabet;
 
     public Automate(Etat initial, ArrayList<Etat> finaux,
-	    ArrayList<String> caracteres) {
+	    ArrayList<String> alphabet) {
 	super();
 	this.initial = initial;
 	this.finaux = finaux;
-	this.alphabet = caracteres;
+	this.alphabet = alphabet;
     }
 
     public Etat getInitial() {
@@ -32,16 +32,20 @@ public class Automate {
 	this.alphabet = alphabet;
     }
 
+    public void addCaractere(String c) {
+	alphabet.add(c);
+    }
+
+    public String getCaractere(int i) {
+	return alphabet.get(i);
+    }
+
+    public void removeCaractere(int i) {
+	alphabet.remove(i);
+    }
+
     public void setFinaux(ArrayList<Etat> finaux) {
 	this.finaux = finaux;
-    }
-
-    public ArrayList<String> getCaracteres() {
-	return alphabet;
-    }
-
-    public void setCaracteres(ArrayList<String> caracteres) {
-	this.alphabet = caracteres;
     }
 
     public void addEtatFinal(Etat t) {
@@ -60,23 +64,6 @@ public class Automate {
 	return finaux;
     }
 
-    public void addCaractere(String c) {
-	alphabet.add(c);
-    }
-
-    public String getCaractere(int i) {
-	return alphabet.get(i);
-    }
-
-    public void removeCaractere(int i) {
-	alphabet.remove(i);
-    }
-
-    public ArrayList<String> getCaracteresList() {
-	return alphabet;
-    }
-
-    /* A revoir pour le cas ou il y'a une epsilon transition */
     public static boolean accept(Etat e, ArrayList<String> lettres, Automate a) {
 
 	/* Si liste vide et etat final ok sinon ko */
@@ -91,12 +78,22 @@ public class Automate {
 	}
 
 	String l = lettres.get(0);
-	lettres.remove(0);
-	ArrayList<Etat> next = e.getNextEtats(e, l);
+	ArrayList<Etat> epsilon = new ArrayList<Etat>();
+	ArrayList<Etat> next = Etat.getNextEtats(e, l, epsilon);
 
 	/* s'il n'ya pas d'etat suivant pour la lettre courante ko */
 	if (next.isEmpty())
 	    return false;
+
+	/* cas epsilon transition */
+	for (Etat n : epsilon) {
+	    /* on continue le parcours de l'automate */
+	    if (accept(n, lettres, a))
+		return true;
+	}
+
+	/* on passe a la lettre suivante car non epsilpon transition */
+	lettres.remove(0);
 
 	for (Etat n : next) {
 	    /* on continue le parcours de l'automate */

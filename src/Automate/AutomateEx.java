@@ -5,7 +5,7 @@ import java.util.ArrayList;
 public class AutomateEx {
 
     public static void main(String[] args) {
-	TestAutomate2();
+	TestAutomate1();
     }
 
     public static void TestAutomate1() {
@@ -35,17 +35,11 @@ public class AutomateEx {
 	e1.addTransition(new Transition(e1, e2, "a"));
 	e1.addTransition(new Transition(e1, e1, "b"));
 
-	e2.addTransition(new Transition(e2, null, "a"));
 	e2.addTransition(new Transition(e2, e3, "b"));
 
-	e3.addTransition(new Transition(e3, null, "a"));
 	e3.addTransition(new Transition(e3, e4, "b"));
 
-	e4.addTransition(new Transition(e4, null, "a"));
 	e4.addTransition(new Transition(e4, e5, "b"));
-
-	e5.addTransition(new Transition(e5, null, "a"));
-	e5.addTransition(new Transition(e5, null, "b"));
 
 	e6.addTransition(new Transition(e6, e6, "a"));
 	e6.addTransition(new Transition(e6, e7, "b"));

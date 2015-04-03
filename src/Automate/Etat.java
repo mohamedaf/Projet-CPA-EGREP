@@ -26,17 +26,26 @@ public class Etat {
 	return transitions.get(i);
     }
 
-    public ArrayList<Etat> getNextEtats(Etat depart, String c) {
+    /* ajouter epsilon TO DO */
+    public static ArrayList<Etat> getNextEtats(Etat depart, String c,
+	    ArrayList<Etat> epsilon) {
+	if (depart == null)
+	    return null;
+
 	ArrayList<Etat> arrivees = new ArrayList<Etat>();
+	/* afin d'etre sur que la liste est vide */
+	epsilon.removeAll(epsilon);
 
 	/* Traiter le cas du point egal a n'importe quel caractere */
 	if (c.equals(new String("."))) {
-	    for (Transition t : transitions) {
+	    for (Transition t : depart.getTransitionsList()) {
 		arrivees.add(t.getArrivee());
 	    }
 	} else {
-	    for (Transition t : transitions) {
-		if (t.getDepart() == depart && t.getCaractere().equals(c))
+	    for (Transition t : depart.getTransitionsList()) {
+		if (t.getCaractere().equals(new String("eps")))
+		    epsilon.add(t.getArrivee());
+		else if (t.getCaractere().equals(c))
 		    arrivees.add(t.getArrivee());
 	    }
 	}

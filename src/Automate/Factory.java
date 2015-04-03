@@ -1,6 +1,7 @@
 package Automate;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 
 public class Factory {
 
@@ -22,18 +23,39 @@ public class Factory {
 	return new Automate(initial, finaux, caracteres);
     }
 
+    public static Automate creerAutomate(String car) {
+	ArrayList<String> caracteres = new ArrayList<String>();
+	ArrayList<Etat> finaux = new ArrayList<Etat>();
+	Etat initial = new Etat();
+	Etat fin = new Etat();
+
+	initial.addTransition(new Transition(initial, fin, car));
+	caracteres.add(car);
+
+	finaux.add(fin);
+
+	return new Automate(initial, finaux, caracteres);
+    }
+
+    public static Automate creerAutomate() {
+	ArrayList<String> caracteres = new ArrayList<String>();
+	ArrayList<Etat> finaux = new ArrayList<Etat>();
+	Etat initial = new Etat();
+
+	finaux.add(initial);
+
+	return new Automate(initial, finaux, caracteres);
+    }
+
     public static Automate concatenation(Automate a1, Automate a2) {
 
 	/* L'alphabet du nouvel automate et l'union des deux alphabets */
 	ArrayList<String> alphabet = new ArrayList<String>();
 
-	for (String s : a1.getCaracteresList()) {
-	    alphabet.add(s);
-	}
+	HashSet<String> hs = new HashSet<String>(a1.getAlphabetList());
+	hs.addAll(a2.getAlphabetList());
 
-	for (String s : a2.getCaracteresList()) {
-	    alphabet.add(s);
-	}
+	alphabet.addAll(hs);
 
 	/* Etat Initial du nouvel automate est l'etat initial de a1 */
 	Etat initial = a1.getInitial();
@@ -56,25 +78,17 @@ public class Factory {
 	/* L'alphabet du nouvel automate et l'union des deux alphabets */
 	ArrayList<String> alphabet = new ArrayList<String>();
 
-	for (String s : a1.getCaracteresList()) {
-	    alphabet.add(s);
-	}
+	HashSet<String> hs = new HashSet<String>(a1.getAlphabetList());
+	hs.addAll(a2.getAlphabetList());
 
-	for (String s : a2.getCaracteresList()) {
-	    alphabet.add(s);
-	}
+	alphabet.addAll(hs);
 
 	/* Etat finaux du nouvel automate l'union des etats finaux de a1 et a2 */
 
 	ArrayList<Etat> finaux = new ArrayList<Etat>();
 
-	for (Etat e : a1.getFinauxList()) {
-	    finaux.add(e);
-	}
-
-	for (Etat e : a2.getFinauxList()) {
-	    finaux.add(e);
-	}
+	finaux.addAll(a1.getFinauxList());
+	finaux.addAll(a2.getFinauxList());
 
 	/* Etat Initial du nouvel automate */
 	Etat init = creerEtat();
