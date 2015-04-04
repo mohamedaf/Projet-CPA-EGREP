@@ -1,4 +1,7 @@
+package parserlexer;
+
 %%
+
 %public
 %byaccj
 
@@ -13,53 +16,58 @@ public Yylex(java.io.Reader r, Parser yyParser){
 
 /* Espace de declaration */
 
+NL = \n | \r | \r\n
+
 %%
 
-"^"            {System.out.println("FIRST\n");
+{NL} {System.out.println("NL");}
+
+"^"            {System.out.println("FIRST");
                 return Parser.FIRST;}
 
-"$"            {System.out.println("DOLLAR\n");
+"$"            {System.out.println("DOLLAR");
                 return Parser.DOLLAR;}
 
-"("            {System.out.println("LPAREN\n");
+"("            {System.out.println("LPAREN");
                 return Parser.LPAREN;}
 
-")"            {System.out.println("RPAREN\n");
+")"            {System.out.println("RPAREN");
                 return Parser.RPAREN;}
 
-"|"            {System.out.println("PIPE\n");
+"|"            {System.out.println("PIPE");
                 return Parser.PIPE;}
 
-"\\"           {System.out.println("BACKSLASH\n");
+"\\"           {System.out.println("BACKSLASH");
                 return Parser.BACKSLASH;}
 
-"["            {System.out.println("LBRACKET\n");
+"["            {System.out.println("LBRACKET");
                 return Parser.LBRACKET;}
 
-"]"            {System.out.println("RBRACKET\n");
+"]"            {System.out.println("RBRACKET");
                 return Parser.RBRACKET;}
 
-"{"            {System.out.println("LBRACES\n");
+"{"            {System.out.println("LBRACES");
                 return Parser.LBRACES;}
 
-"}"            {System.out.println("RBRACES\n");
+"}"            {System.out.println("RBRACES");
                 return Parser.RBRACES;}
 
-"."            {System.out.println("POINT\n");
+"."            {System.out.println("POINT");
                 return Parser.POINT;}
 
-"*"            {System.out.println("STAR\n");
+"*"            {System.out.println("STAR");
                 return Parser.STAR;}
 
-"+"            {System.out.println("PLUS\n");
+"+"            {System.out.println("PLUS");
                 return Parser.PLUS;}
 
-"?"            {System.out.println("QUESTIONMARK\n");
+"?"            {System.out.println("QUESTIONMARK");
                 return Parser.QUESTIONMARK;}
 
-[[:digit:]]+   {yyParser.yylval = new ParserVal(Integer.parseInt(yytext()));
+[[:digit:]]+   {System.out.println("DIGIT");
+				yyParser.yylval = new ParserVal(Integer.parseInt(yytext()));
                 return Parser.DIGIT;}
 
-[a-zA-Z0-9_=]  {System.out.println("CHAR\n");
+[a-zA-Z0-9_=]  {System.out.println("CHAR");
                 yyParser.yylval = new ParserVal(yytext());
                 return Parser.CHAR;}

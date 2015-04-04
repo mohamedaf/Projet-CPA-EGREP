@@ -1,8 +1,15 @@
 package Automate;
 
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Automate {
+@SuppressWarnings("serial")
+public class Automate implements Serializable {
 
     private Etat initial;
     private ArrayList<Etat> finaux;
@@ -72,18 +79,49 @@ public class Automate {
 		System.out.println("Liste vide etat final");
 		return true;
 	    } else {
+		/*
+		 * on doit verifier l'existance epsilon transition appel
+		 * recursif sinon return false
+		 */
+		ArrayList<Etat> eps = new ArrayList<Etat>();
+		Etat.getNextEtats(e, null, eps);
+
+		for (Etat n : eps) {
+		    if (accept(n, lettres, a))
+			return true;
+		}
+
 		System.out.println("Liste vide pas etat final");
 		return false;
 	    }
 	}
 
 	String l = lettres.get(0);
+
+	/* Ajouter les cas debut '^' et fin '$' */
+	if (l.equals("^")) {
+	    if (a.getInitial() != e) {
+		return false;
+	    } else {
+		lettres.remove(0);
+		if (accept(e, lettres, a))
+		    return true;
+	    }
+	} else if (l.equals("$")) {
+	    if (!a.getFinauxList().contains(e)) {
+		return false;
+	    } else {
+		lettres.remove(0);
+
+		if (!lettres.isEmpty())
+		    return false;
+
+		return true;
+	    }
+	}
+
 	ArrayList<Etat> epsilon = new ArrayList<Etat>();
 	ArrayList<Etat> next = Etat.getNextEtats(e, l, epsilon);
-
-	/* s'il n'ya pas d'etat suivant pour la lettre courante ko */
-	if (next.isEmpty())
-	    return false;
 
 	/* cas epsilon transition */
 	for (Etat n : epsilon) {
@@ -92,7 +130,7 @@ public class Automate {
 		return true;
 	}
 
-	/* on passe a la lettre suivante car non epsilpon transition */
+	/* on passe a la lettre suivante car non epsilon transition */
 	lettres.remove(0);
 
 	for (Etat n : next) {
@@ -102,5 +140,32 @@ public class Automate {
 	}
 
 	return false;
+    }
+
+    @Override
+    public Automate clone() {
+	ObjectOutputStream out;
+	ObjectInputStream in;
+
+	Automate a = null;
+
+	try {
+	    out = new ObjectOutputStream(new FileOutputStream("Automate.ser"));
+	    out.writeObject(this);
+	    out.flush();
+	    out.close();
+
+	    in = new ObjectInputStream(new FileInputStream("Automate.ser"));
+	    /* Lecture de la copie de l'automate */
+	    a = (Automate) in.readObject();
+	    in.close();
+
+	} catch (IOException e) {
+	    e.printStackTrace();
+	} catch (ClassNotFoundException e) {
+	    System.err.println(e);
+	}
+
+	return a;
     }
 }

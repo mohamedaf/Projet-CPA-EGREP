@@ -5,7 +5,9 @@ import java.util.ArrayList;
 public class AutomateEx {
 
     public static void main(String[] args) {
-	TestAutomate1();
+	// TestAutomate4();
+	// TestAutomate5();
+	// TestAutomate6();
     }
 
     public static void TestAutomate1() {
@@ -154,4 +156,147 @@ public class AutomateEx {
 	else
 	    System.out.println("erreur");
     }
+
+    public static void TestAutomate3() {
+	Etat initial, inter, inter2, fin;
+	ArrayList<Etat> finaux = new ArrayList<Etat>();
+	ArrayList<String> alphabet = new ArrayList<String>();
+
+	/* Initialisation de l'automate */
+
+	alphabet.add("a");
+	alphabet.add("b");
+
+	inter2 = new Etat();
+	inter = new Etat();
+	initial = new Etat();
+	fin = new Etat();
+
+	initial.addTransition(new Transition(initial, inter, "a"));
+	inter.addTransition(new Transition(inter, inter2, "b"));
+	inter2.addTransition(new Transition(inter2, fin, "a"));
+
+	finaux.add(fin);
+
+	Automate a = new Automate(initial, finaux, alphabet);
+
+	/* test sur des expressions donnees si l'automate accepte */
+
+	ArrayList<String> texte = new ArrayList<String>();
+
+	texte.add("a");
+	texte.add("b");
+	texte.add("a");
+
+	if (Automate.accept(a.getInitial(), texte, a))
+	    System.out.println("youpie");
+	else
+	    System.out.println("erreur");
+    }
+
+    public static void TestAutomate4() {
+	Etat init1, init2, fin1, fin2;
+	ArrayList<Etat> finaux1 = new ArrayList<Etat>();
+	ArrayList<String> alphabet1 = new ArrayList<String>();
+	ArrayList<Etat> finaux2 = new ArrayList<Etat>();
+	ArrayList<String> alphabet2 = new ArrayList<String>();
+
+	init1 = new Etat();
+	init2 = new Etat();
+	fin1 = new Etat();
+	fin2 = new Etat();
+
+	alphabet1.add("a");
+	alphabet2.add("b");
+
+	init1.addTransition(new Transition(init1, fin1, "a"));
+	init2.addTransition(new Transition(init2, fin2, "b"));
+
+	finaux1.add(fin1);
+	finaux2.add(fin2);
+
+	Automate a1 = new Automate(init1, finaux1, alphabet1);
+	Automate a2 = new Automate(init2, finaux2, alphabet2);
+
+	Automate a3 = Factory.concatenation(a1, a2);
+
+	ArrayList<String> texte = new ArrayList<String>();
+
+	texte.add("a");
+	// texte.add("b");
+
+	if (Automate.accept(a3.getInitial(), texte, a3))
+	    System.out.println("youpie");
+	else
+	    System.out.println("erreur");
+
+    }
+
+    public static void TestAutomate5() {
+	Etat init1, fin1;
+	ArrayList<Etat> finaux = new ArrayList<Etat>();
+	ArrayList<String> alphabet = new ArrayList<String>();
+
+	init1 = new Etat();
+	fin1 = new Etat();
+
+	alphabet.add("a");
+
+	init1.addTransition(new Transition(init1, fin1, "a"));
+
+	finaux.add(fin1);
+
+	Automate a1 = new Automate(init1, finaux, alphabet);
+
+	ArrayList<String> texte = new ArrayList<String>();
+
+	texte.add("a");
+	texte.add("a");
+	Automate a2 = a1.clone();
+
+	a1 = Factory.concatenation(a1, a2);
+
+	if (Automate.accept(a1.getInitial(), texte, a1))
+	    System.out.println("youpie");
+	else
+	    System.out.println("erreur");
+    }
+
+    public static void TestAutomate6() {
+	Etat init1, init2, fin1, fin2;
+	ArrayList<Etat> finaux1 = new ArrayList<Etat>();
+	ArrayList<String> alphabet1 = new ArrayList<String>();
+	ArrayList<Etat> finaux2 = new ArrayList<Etat>();
+	ArrayList<String> alphabet2 = new ArrayList<String>();
+
+	init1 = new Etat();
+	init2 = new Etat();
+	fin1 = new Etat();
+	fin2 = new Etat();
+
+	alphabet1.add("a");
+
+	init1.addTransition(new Transition(init1, fin1, "a"));
+	init2.addTransition(new Transition(init2, fin2, "a"));
+
+	finaux1.add(fin1);
+	finaux2.add(fin2);
+
+	Automate a1 = new Automate(init1, finaux1, alphabet1);
+	Automate a2 = new Automate(init2, finaux2, alphabet2);
+
+	Automate a3 = Factory.concatenation(a1, a2);
+
+	ArrayList<String> texte = new ArrayList<String>();
+
+	texte.add("a");
+	// texte.add("b");
+
+	if (Automate.accept(a3.getInitial(), texte, a3))
+	    System.out.println("youpie");
+	else
+	    System.out.println("erreur");
+
+    }
+
 }

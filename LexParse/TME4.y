@@ -1,13 +1,20 @@
 %{
+package parserlexer;
+
 import java.io.*;
 import java.util.ArrayList;
+
+import Automate.Automate;
+import Automate.Etat;
+import Automate.Factory;
 %}
 
 %token LPAREN RPAREN PIPE LBRACES RBRACES LBRACKET RBRACKET
 %token POINT STAR PLUS QUESTIONMARK CHAR DOLLAR FIRST BACKSLASH DIGIT
 %start  extended_reg_exp
 
-%type <sval> QUOTED_CHAR ERE_dupl_symbol
+%type <sval> CHAR QUOTED_CHAR ERE_dupl_symbol
+%type <ival> DIGIT
 %type <obj> bracket_expression matching_list nonmatching_list bracket_list
 %type <obj> follow_list extended_reg_exp ERE_branch ERE_expression
 %type <obj> one_char_or_coll_elem_ERE expression_term single_expression
@@ -49,10 +56,10 @@ end_range      : CHAR {}
    --------------------------------------------
 */
 
-extended_reg_exp   :                       ERE_branch    { a = (Automate) $1; }
+extended_reg_exp   :                       ERE_branch    { auto = (Automate) $1; }
                    | extended_reg_exp PIPE ERE_branch    {
-		     a = (Automate) Factory.union((Automate) $1,
-						  (Automate) $2);
+		     auto = (Automate) Factory.union((Automate) $1,
+						  (Automate) $3);
                    }
                    ;
 ERE_branch         :            ERE_expression    { $$ = (Automate) $1; }
@@ -79,8 +86,9 @@ ERE_expression     : one_char_or_coll_elem_ERE    { $$ = (Automate) $1; }
 		     default:
 		       String tab[] = s.split(",");
 		       if(tab.length == 1){
+			   System.out.println("Repetitions : "+tab[0]);
 			 /* Exactement n repetitions */
-			 for(int i=1; i<Integer.Integer.parseInt(tab[0]); i++){
+			 for(int i=1; i<Integer.parseInt(tab[0]); i++){
 			   tmp = Factory.concatenation(tmp, tmp2);
 			 }
 			 $$ = tmp;
@@ -89,8 +97,8 @@ ERE_expression     : one_char_or_coll_elem_ERE    { $$ = (Automate) $1; }
 			 /* Au moins n repetitions, donc n-1 concatenation et
 			    transformation Plus pour dernier automate pour
 			    pouvoir repeter */
-			 for(int i=1; i<Integer.Integer.parseInt(tab[0]); i++){
-			   if(i == (Integer.Integer.parseInt(tab[0])-1)){
+			 for(int i=1; i<Integer.parseInt(tab[0]); i++){
+			   if(i == (Integer.parseInt(tab[0])-1)){
 			     tmp = Factory.concatenation(tmp, Factory.Plus(tmp2));
 			   }
 			   else{
@@ -103,16 +111,16 @@ ERE_expression     : one_char_or_coll_elem_ERE    { $$ = (Automate) $1; }
 			 int i;
 
 			 ArrayList<Etat> finaux = new ArrayList<Etat>();
-			 Etat f = creerEtat();
+			 Etat f = Factory.creerEtat();
 
-			 for(i=1; i<Integer.Integer.parseInt(tab[0]); i++){
+			 for(i=1; i<Integer.parseInt(tab[0]); i++){
 			   tmp = Factory.concatenation(tmp, tmp2);
 			 }
 
 			 /* apres le min on peux s'arreter donc on ajoute
 								   un etat final et des transitions */
-			 for(i; i<Integer.Integer.parseInt(tab[1]); i++){
-			   if(i<(Integer.Integer.parseInt(tab[1])-1)){
+			 for(; i<Integer.parseInt(tab[1]); i++){
+			   if(i<(Integer.parseInt(tab[1])-1)){
 			     finaux.addAll(tmp.getFinauxList());
 			   }
 			   tmp = Factory.concatenation(tmp, tmp2);
@@ -121,7 +129,7 @@ ERE_expression     : one_char_or_coll_elem_ERE    { $$ = (Automate) $1; }
 			 /* Ajouer une epsilon transition allant des anciens
 			    etats finaux au nouvel etat final */
 			 for(Etat e : finaux){
-			   e.addTransition(creerTransition(e, f, new String("eps")));
+			   e.addTransition(Factory.creerTransition(e, f, new String("eps")));
 			 }
 
 			 tmp.addEtatFinal(f);
@@ -137,12 +145,12 @@ ERE_expression     : one_char_or_coll_elem_ERE    { $$ = (Automate) $1; }
 one_char_or_coll_elem_ERE  : CHAR          { $$ = (Automate) Factory.creerAutomate(new String($1)); }
                    | QUOTED_CHAR           { $$ = (Automate) Factory.creerAutomate(new String($1)); }
                    | POINT                 { $$ = (Automate) Factory.creerAutomate(new String(".")); }
-                   | bracket_expression    { /* Pas encore */ }
+                   | bracket_expression    { $$ - (Automate) $1; }
                    ;
 ERE_dupl_symbol    : STAR                               { $$ = (String) new String("*"); }
                    | PLUS                               { $$ = (String) new String("+"); }
                    | QUESTIONMARK                       { $$ = (String) new String("?"); }
-                   | LBRACES DIGIT           RBRACES    { $$ = (String) new String($2); }
+                   | LBRACES DIGIT           RBRACES    { $$ = (String) new String(""+$2); }
                    | LBRACES DIGIT ','       RBRACES    { $$ = (String) new String($2+",hk"); }
                    | LBRACES DIGIT ',' DIGIT RBRACES    { $$ = (String) new String($2+","+$4); }
                    ;
@@ -151,7 +159,11 @@ ERE_dupl_symbol    : STAR                               { $$ = (String) new Stri
 
 private Yylex lexer;
 
-Automate a;
+static Automate auto;
+
+public Automate getAutomate(){
+	return auto;
+}
 
 private int yylex () {
     int yyl_return = -1;
@@ -179,21 +191,39 @@ public Parser(Reader r) {
 static boolean interactive;
 
 public static void main(String args[]) throws IOException {
-    System.out.println("Traducteur BOPL Prolog");
-
-    Parser yyparser = null;
-    if ( args.length > 0 ) {
-	// parse a file
-	for(int i=0; i<args.length; i++){
-            yyparser = new Parser(new FileReader(args[i]));
-            yyparser.yyparse();
-      }
+  System.out.println("Automate");
+  
+  String txt = args[args.length - 1];
+  
+  ArrayList<String> lettres = new ArrayList<String>();
+  
+  for (int j = 0; j < txt.length(); j++)
+    lettres.add("" + txt.charAt(j));
+  
+  Parser yyparser = null;
+  if (args.length > 0) {
+    // parse a file
+    for (int i = 0; i < args.length - 1; i++) {
+      
+      System.out.println("Fichier " + args[i] + " : ");
+      
+      auto = null;
+      
+      yyparser = new Parser(new FileReader(args[i]));
+      yyparser.yyparse();
+      
+      boolean result;
+      
+      result = Automate.accept(auto.getInitial(), lettres, auto);
+      
+      System.out.println("Résultat : " + result);
+      
     }
-    else {
-	// interactive mode
-	System.out.println("No input file");
-    }
-
-    System.out.println();
-    System.out.println("....... Fin .......");
+  } else {
+    // interactive mode
+    System.out.println("No input file");
+  }
+  
+  System.out.println();
+  System.out.println("....... Fin .......");
 }

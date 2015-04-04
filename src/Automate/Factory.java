@@ -24,17 +24,17 @@ public class Factory {
     }
 
     public static Automate creerAutomate(String car) {
-	ArrayList<String> caracteres = new ArrayList<String>();
+	ArrayList<String> alphabet = new ArrayList<String>();
 	ArrayList<Etat> finaux = new ArrayList<Etat>();
 	Etat initial = new Etat();
 	Etat fin = new Etat();
 
 	initial.addTransition(new Transition(initial, fin, car));
-	caracteres.add(car);
+	alphabet.add(car);
 
 	finaux.add(fin);
 
-	return new Automate(initial, finaux, caracteres);
+	return new Automate(initial, finaux, alphabet);
     }
 
     public static Automate creerAutomate() {

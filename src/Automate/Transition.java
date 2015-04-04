@@ -1,6 +1,9 @@
 package Automate;
 
-public class Transition {
+import java.io.Serializable;
+
+@SuppressWarnings("serial")
+public class Transition implements Serializable {
 
     private Etat depart;
     private Etat arrivee;
@@ -35,5 +38,11 @@ public class Transition {
 
     public void setCaractere(String caractere) {
 	this.caractere = caractere;
+    }
+
+    @Override
+    public Transition clone() {
+	return new Transition(depart.clone(), arrivee.clone(), new String(""
+		+ caractere));
     }
 }
