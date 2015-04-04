@@ -76,7 +76,7 @@ public class Automate implements Serializable {
 	/* Si liste vide et etat final ok sinon ko */
 	if (lettres.isEmpty()) {
 	    if (a.getFinauxList().contains(e)) {
-		System.out.println("Liste vide etat final");
+		// System.out.println("Liste vide etat final");
 		return true;
 	    } else {
 		/*
@@ -87,11 +87,11 @@ public class Automate implements Serializable {
 		Etat.getNextEtats(e, null, eps);
 
 		for (Etat n : eps) {
-		    if (accept(n, lettres, a))
+		    if (accept(n, (ArrayList<String>) lettres.clone(), a))
 			return true;
 		}
 
-		System.out.println("Liste vide pas etat final");
+		// System.out.println("Liste vide pas etat final");
 		return false;
 	    }
 	}
@@ -104,7 +104,7 @@ public class Automate implements Serializable {
 		return false;
 	    } else {
 		lettres.remove(0);
-		if (accept(e, lettres, a))
+		if (accept(e, (ArrayList<String>) lettres.clone(), a))
 		    return true;
 	    }
 	} else if (l.equals("$")) {
@@ -126,7 +126,7 @@ public class Automate implements Serializable {
 	/* cas epsilon transition */
 	for (Etat n : epsilon) {
 	    /* on continue le parcours de l'automate */
-	    if (accept(n, lettres, a))
+	    if (accept(n, (ArrayList<String>) lettres.clone(), a))
 		return true;
 	}
 
@@ -135,7 +135,7 @@ public class Automate implements Serializable {
 
 	for (Etat n : next) {
 	    /* on continue le parcours de l'automate */
-	    if (accept(n, lettres, a))
+	    if (accept(n, (ArrayList<String>) lettres.clone(), a))
 		return true;
 	}
 

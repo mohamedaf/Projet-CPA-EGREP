@@ -38,9 +38,12 @@ public class Etat implements Serializable {
 	epsilon.removeAll(epsilon);
 
 	/* Traiter le cas du point egal a n'importe quel caractere */
-	if (c.equals(".")) {
+	if ((c != null) && c.equals(".")) {
 	    for (Transition t : depart.getTransitionsList()) {
-		arrivees.add(t.getArrivee());
+		if (t.getCaractere().equals("eps"))
+		    epsilon.add(t.getArrivee());
+		else
+		    arrivees.add(t.getArrivee());
 	    }
 	} else {
 	    for (Transition t : depart.getTransitionsList()) {

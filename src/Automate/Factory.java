@@ -49,6 +49,24 @@ public class Factory {
 
     public static Automate concatenation(Automate a1, Automate a2) {
 
+	if (a1 == null)
+	    return a2;
+
+	if (a2 == null)
+	    return a1;
+
+	/* si a1 vide retourner a2 */
+	if ((a1.getFinauxList().size() == 1)
+		&& (a1.getInitial() == a1.getEtatFinal(0))) {
+	    return a2;
+	}
+
+	/* si a2 vide retourner a1 */
+	if ((a2.getFinauxList().size() == 1)
+		&& (a2.getInitial() == a2.getEtatFinal(0))) {
+	    return a1;
+	}
+
 	/* L'alphabet du nouvel automate et l'union des deux alphabets */
 	ArrayList<String> alphabet = new ArrayList<String>();
 
@@ -157,6 +175,76 @@ public class Factory {
 	}
 
 	return a;
+    }
+
+    public static Automate ERE_dupl_symbol(Automate tmp, String s) {
+	Automate tmp2 = tmp.clone();
+
+	switch (s) {
+	case "*":
+	    return Factory.Star(tmp);
+	case "+":
+	    return Factory.Plus(tmp);
+	case "?":
+	    return Factory.questionMark(tmp);
+	default:
+	    String tab[] = s.split(",");
+	    if (tab.length == 1) {
+		System.out.println("Repetitions : " + tab[0]);
+		/* Exactement n repetitions */
+		for (int i = 1; i < Integer.parseInt(tab[0]); i++) {
+		    tmp = Factory.concatenation(tmp, tmp2);
+		}
+		return tmp;
+	    } else if (tab[1].equals("hk")) {
+		/*
+		 * Au moins n repetitions, donc n-1 concatenation et
+		 * transformation Plus pour dernier automate pour pouvoir
+		 * repeter
+		 */
+		for (int i = 1; i < Integer.parseInt(tab[0]); i++) {
+		    if (i == (Integer.parseInt(tab[0]) - 1)) {
+			tmp = Factory.concatenation(tmp, Factory.Plus(tmp2));
+		    } else {
+			tmp = Factory.concatenation(tmp, tmp2);
+		    }
+		}
+		return tmp;
+	    } else {
+		int i;
+
+		ArrayList<Etat> finaux = new ArrayList<Etat>();
+		Etat f = Factory.creerEtat();
+
+		for (i = 1; i < Integer.parseInt(tab[0]); i++) {
+		    tmp = Factory.concatenation(tmp, tmp2);
+		}
+
+		/*
+		 * apres le min on peux s'arreter donc on ajoute un etat final
+		 * et des transitions
+		 */
+		for (; i < Integer.parseInt(tab[1]); i++) {
+		    if (i < (Integer.parseInt(tab[1]) - 1)) {
+			finaux.addAll(tmp.getFinauxList());
+		    }
+		    tmp = Factory.concatenation(tmp, tmp2);
+		}
+
+		/*
+		 * Ajouer une epsilon transition allant des anciens etats finaux
+		 * au nouvel etat final
+		 */
+		for (Etat e : finaux) {
+		    e.addTransition(Factory.creerTransition(e, f, new String(
+			    "eps")));
+		}
+
+		tmp.addEtatFinal(f);
+
+		return tmp;
+	    }
+	}
     }
 
     /**************************************************************************/

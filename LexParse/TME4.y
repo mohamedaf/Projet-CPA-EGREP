@@ -72,75 +72,8 @@ ERE_expression     : one_char_or_coll_elem_ERE    { $$ = (Automate) $1; }
                    | FIRST                        { $$ = (Automate) Factory.creerAutomate(); }
                    | DOLLAR                       { $$ = (Automate) Factory.creerAutomate(); }
                    | RPAREN extended_reg_exp LPAREN    { $$ = (Automate) $2; }
-                   | ERE_expression ERE_dupl_symbol    {
-		     String s = (String)$2;
-		     Automate tmp = (Automate) $1;
-		     Automate tmp2 = tmp.clone();
-		     switch(s){
-		     case "*": $$ = (Automate) Factory.Star((Automate) $1);
-		       break;
-		     case "+": $$ = (Automate) Factory.Plus((Automate) $1);
-		       break;
-		     case "?": $$ = (Automate) Factory.questionMark((Automate) $1);
-		       break;
-		     default:
-		       String tab[] = s.split(",");
-		       if(tab.length == 1){
-			   System.out.println("Repetitions : "+tab[0]);
-			 /* Exactement n repetitions */
-			 for(int i=1; i<Integer.parseInt(tab[0]); i++){
-			   tmp = Factory.concatenation(tmp, tmp2);
-			 }
-			 $$ = tmp;
-		       }
-		       else if(tab[1].equals("hk")){
-			 /* Au moins n repetitions, donc n-1 concatenation et
-			    transformation Plus pour dernier automate pour
-			    pouvoir repeter */
-			 for(int i=1; i<Integer.parseInt(tab[0]); i++){
-			   if(i == (Integer.parseInt(tab[0])-1)){
-			     tmp = Factory.concatenation(tmp, Factory.Plus(tmp2));
-			   }
-			   else{
-			     tmp = Factory.concatenation(tmp, tmp2);
-			   }
-			 }
-			 $$ = tmp;
-		       }
-		       else{
-			 int i;
-
-			 ArrayList<Etat> finaux = new ArrayList<Etat>();
-			 Etat f = Factory.creerEtat();
-
-			 for(i=1; i<Integer.parseInt(tab[0]); i++){
-			   tmp = Factory.concatenation(tmp, tmp2);
-			 }
-
-			 /* apres le min on peux s'arreter donc on ajoute
-								   un etat final et des transitions */
-			 for(; i<Integer.parseInt(tab[1]); i++){
-			   if(i<(Integer.parseInt(tab[1])-1)){
-			     finaux.addAll(tmp.getFinauxList());
-			   }
-			   tmp = Factory.concatenation(tmp, tmp2);
-			 }
-
-			 /* Ajouer une epsilon transition allant des anciens
-			    etats finaux au nouvel etat final */
-			 for(Etat e : finaux){
-			   e.addTransition(Factory.creerTransition(e, f, new String("eps")));
-			 }
-
-			 tmp.addEtatFinal(f);
-
-			 $$ = tmp;
-
-		       }
-
-		       break;
-		     }
-                   }
+                   | ERE_expression ERE_dupl_symbol    { $$ = (Automate) Factory.ERE_dupl_symbol((Automate) $1,
+                                                                                                 (String) $2); }
                    ;
 one_char_or_coll_elem_ERE  : CHAR          { $$ = (Automate) Factory.creerAutomate(new String($1)); }
                    | QUOTED_CHAR           { $$ = (Automate) Factory.creerAutomate(new String($1)); }
