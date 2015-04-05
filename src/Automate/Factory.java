@@ -47,6 +47,18 @@ public class Factory {
 	return new Automate(initial, finaux, caracteres);
     }
 
+    public static ArrayList<Automate> creerAutomatesMatchingList(
+	    ArrayList<String> ls) {
+
+	ArrayList<Automate> la = new ArrayList<Automate>();
+
+	for (String s : ls) {
+	    la.add(Factory.creerAutomate(s));
+	}
+
+	return la;
+    }
+
     public static Automate concatenation(Automate a1, Automate a2) {
 
 	if (a1 == null)
@@ -190,11 +202,11 @@ public class Factory {
 	default:
 	    String tab[] = s.split(",");
 	    if (tab.length == 1) {
-		System.out.println("Repetitions : " + tab[0]);
 		/* Exactement n repetitions */
 		for (int i = 1; i < Integer.parseInt(tab[0]); i++) {
-		    tmp = Factory.concatenation(tmp, tmp2);
+		    tmp = Factory.concatenation(tmp, tmp2.clone());
 		}
+
 		return tmp;
 	    } else if (tab[1].equals("hk")) {
 		/*
@@ -204,43 +216,28 @@ public class Factory {
 		 */
 		for (int i = 1; i < Integer.parseInt(tab[0]); i++) {
 		    if (i == (Integer.parseInt(tab[0]) - 1)) {
-			tmp = Factory.concatenation(tmp, Factory.Plus(tmp2));
+			tmp = Factory.concatenation(tmp,
+				Factory.Plus(tmp2.clone()));
 		    } else {
-			tmp = Factory.concatenation(tmp, tmp2);
+			tmp = Factory.concatenation(tmp, tmp2.clone());
 		    }
 		}
+
 		return tmp;
 	    } else {
-		int i;
-
 		ArrayList<Etat> finaux = new ArrayList<Etat>();
-		Etat f = Factory.creerEtat();
 
-		for (i = 1; i < Integer.parseInt(tab[0]); i++) {
-		    tmp = Factory.concatenation(tmp, tmp2);
-		}
+		for (int i = 1; i < Integer.parseInt(tab[1]); i++) {
+		    tmp = Factory.concatenation(tmp, tmp2.clone());
 
-		/*
-		 * apres le min on peux s'arreter donc on ajoute un etat final
-		 * et des transitions
-		 */
-		for (; i < Integer.parseInt(tab[1]); i++) {
-		    if (i < (Integer.parseInt(tab[1]) - 1)) {
+		    if (i >= (Integer.parseInt(tab[0]) - 1)) {
 			finaux.addAll(tmp.getFinauxList());
 		    }
-		    tmp = Factory.concatenation(tmp, tmp2);
 		}
 
-		/*
-		 * Ajouer une epsilon transition allant des anciens etats finaux
-		 * au nouvel etat final
-		 */
-		for (Etat e : finaux) {
-		    e.addTransition(Factory.creerTransition(e, f, new String(
-			    "eps")));
-		}
-
-		tmp.addEtatFinal(f);
+		tmp.setFinaux(finaux);
+		tmp.getEtatFinal(tmp.getFinauxList().size() - 1)
+			.setTransitions(new ArrayList<Transition>());
 
 		return tmp;
 	    }

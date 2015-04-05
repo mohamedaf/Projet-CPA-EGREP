@@ -5,6 +5,7 @@ import java.util.ArrayList;
 public class AutomateEx {
 
     public static void main(String[] args) {
+	/* Tous les tests fonctionnent */
 	TestAutomate1();
 	TestAutomate2();
 	TestAutomate3();
@@ -15,11 +16,10 @@ public class AutomateEx {
 	TestAutomate8();
 	TestAutomate9();
 	TestAutomate10();
-	/* Probleme numero 11 */
 	TestAutomate11();
 	TestAutomate12();
-	/* Probleme numero 13 */
 	TestAutomate13();
+	TestAutomate14();
     }
 
     public static void TestAutomate1() {
@@ -85,7 +85,7 @@ public class AutomateEx {
 	texte.add("b");
 	texte.add("b");
 
-	if (Automate.accept(e0, texte, a))
+	if (Automate.accept(e0, "aabbabbb", a))
 	    System.out.println("youpie");
 	else
 	    System.out.println("erreur");
@@ -102,7 +102,7 @@ public class AutomateEx {
 	texte.add("a");
 	texte.add("b");
 
-	if (Automate.accept(a3.getInitial(), texte, a3))
+	if (Automate.accept(a3.getInitial(), "ab", a3))
 	    System.out.println("youpie");
 	else
 	    System.out.println("erreur");
@@ -120,7 +120,7 @@ public class AutomateEx {
 	// texte.add("a");
 	texte.add("b");
 
-	if (Automate.accept(a3.getInitial(), texte, a3))
+	if (Automate.accept(a3.getInitial(), "b", a3))
 	    System.out.println("youpie");
 	else
 	    System.out.println("erreur");
@@ -149,7 +149,7 @@ public class AutomateEx {
 	texte.add("b");
 	texte.add("$");
 
-	if (Automate.accept(a.getInitial(), texte, a))
+	if (Automate.accept(a.getInitial(), "^acb$", a))
 	    System.out.println("youpie");
 	else
 	    System.out.println("erreur");
@@ -175,7 +175,7 @@ public class AutomateEx {
 	texte.add("b");
 	texte.add("t");
 
-	if (Automate.accept(a.getInitial(), texte, a))
+	if (Automate.accept(a.getInitial(), "abbbt", a))
 	    System.out.println("youpie");
 	else
 	    System.out.println("erreur");
@@ -199,7 +199,7 @@ public class AutomateEx {
 	texte.add("b");
 	texte.add("t");
 
-	if (Automate.accept(a.getInitial(), texte, a))
+	if (Automate.accept(a.getInitial(), "abt", a))
 	    System.out.println("youpie");
 	else
 	    System.out.println("erreur");
@@ -222,7 +222,7 @@ public class AutomateEx {
 	/* Fonctionne pour au moins un s */
 	texte.add("s");
 
-	if (Automate.accept(a.getInitial(), texte, a))
+	if (Automate.accept(a.getInitial(), "abs", a))
 	    System.out.println("youpie");
 	else
 	    System.out.println("erreur");
@@ -248,7 +248,7 @@ public class AutomateEx {
 	texte.add("t");
 	texte.add("r");
 
-	if (Automate.accept(a.getInitial(), texte, a))
+	if (Automate.accept(a.getInitial(), "btr", a))
 	    System.out.println("youpie");
 	else
 	    System.out.println("erreur");
@@ -275,7 +275,7 @@ public class AutomateEx {
 	texte.add("t");
 	texte.add("s");
 
-	if (Automate.accept(a.getInitial(), texte, a))
+	if (Automate.accept(a.getInitial(), "artsts", a))
 	    System.out.println("youpie");
 	else
 	    System.out.println("erreur");
@@ -300,7 +300,7 @@ public class AutomateEx {
 	texte.add(".");
 	texte.add("k");
 
-	if (Automate.accept(a.getInitial(), texte, a))
+	if (Automate.accept(a.getInitial(), "ap.k", a))
 	    System.out.println("youpie");
 	else
 	    System.out.println("erreur");
@@ -311,20 +311,19 @@ public class AutomateEx {
 
 	Automate a1 = Factory.creerAutomate(new String("a"));
 	Automate a2 = Factory.creerAutomate(new String("p"));
-	Automate a3 = Factory.ERE_dupl_symbol(a2, new String("2"));
+	a2 = Factory.ERE_dupl_symbol(a2, new String("2"));
 
 	/* a1 -> a2 -> a3 -> a4 -> a5 */
-	Automate a = Factory.concatenation(Factory.concatenation(a1, a2), a3);
+	Automate a = Factory.concatenation(a1, a2);
 
 	ArrayList<String> texte = new ArrayList<String>();
 
 	texte.add("a");
 	texte.add("p");
 	texte.add("p");
-	/* Probleme fonctionne aussi si plus que 2 */
-	texte.add("p");
+	// texte.add("p");
 
-	if (Automate.accept(a.getInitial(), texte, a))
+	if (Automate.accept(a.getInitial(), "app", a))
 	    System.out.println("youpie");
 	else
 	    System.out.println("erreur");
@@ -335,32 +334,33 @@ public class AutomateEx {
 
 	Automate a1 = Factory.creerAutomate(new String("a"));
 	Automate a2 = Factory.creerAutomate(new String("p"));
-	Automate a3 = Factory.ERE_dupl_symbol(a2, new String("2,hk"));
+	a2 = Factory.ERE_dupl_symbol(a2, new String("2,hk"));
 
 	/* a1 -> a2 -> a3 -> a4 -> a5 */
-	Automate a = Factory.concatenation(Factory.concatenation(a1, a2), a3);
+	Automate a = Factory.concatenation(a1, a2);
 
 	ArrayList<String> texte = new ArrayList<String>();
 
 	texte.add("a");
 	texte.add("p");
 	texte.add("p");
+	texte.add("p");
 
-	if (Automate.accept(a.getInitial(), texte, a))
+	if (Automate.accept(a.getInitial(), "appp", a))
 	    System.out.println("youpie");
 	else
 	    System.out.println("erreur");
     }
 
     public static void TestAutomate13() {
-	/* ap{2,4} */
+	/* ap{2,3} */
 
 	Automate a1 = Factory.creerAutomate(new String("a"));
 	Automate a2 = Factory.creerAutomate(new String("p"));
-	Automate a3 = Factory.ERE_dupl_symbol(a2, new String("2,4"));
+	a2 = Factory.ERE_dupl_symbol(a2, new String("2,3"));
 
 	/* a1 -> a2 -> a3 -> a4 -> a5 */
-	Automate a = Factory.concatenation(Factory.concatenation(a1, a2), a3);
+	Automate a = Factory.concatenation(a1, a2);
 
 	ArrayList<String> texte = new ArrayList<String>();
 
@@ -368,11 +368,34 @@ public class AutomateEx {
 	texte.add("p");
 	texte.add("p");
 	texte.add("p");
-	texte.add("p");
-	texte.add("p");
-	texte.add("p");
+	// texte.add("p");
 
-	if (Automate.accept(a.getInitial(), texte, a))
+	if (Automate.accept(a.getInitial(), "appp", a))
+	    System.out.println("youpie");
+	else
+	    System.out.println("erreur");
+    }
+
+    public static void TestAutomate14() {
+	/* a\.{2,3}$ */
+
+	Automate a1 = Factory.creerAutomate(new String("a"));
+	Automate a2 = Factory.creerAutomate(new String("."));
+	a2 = Factory.ERE_dupl_symbol(a2, new String("2,3"));
+	Automate a3 = Factory.creerAutomate();
+
+	/* a1 -> a2 -> a3 -> a4 -> a5 */
+	Automate a = Factory.concatenation(Factory.concatenation(a1, a2), a3);
+
+	ArrayList<String> texte = new ArrayList<String>();
+
+	texte.add("a");
+	texte.add("\\.");
+	texte.add("\\.");
+	texte.add("\\.");
+	// texte.add("\\.");
+
+	if (Automate.accept(a.getInitial(), "a\\.\\.\\.", a))
 	    System.out.println("youpie");
 	else
 	    System.out.println("erreur");

@@ -71,7 +71,34 @@ public class Automate implements Serializable {
 	return finaux;
     }
 
-    public static boolean accept(Etat e, ArrayList<String> lettres, Automate a) {
+    public static boolean accept(Etat e, String mot, Automate a) {
+	String tab[] = mot.split("");
+	ArrayList<String> lettres = new ArrayList<String>();
+
+	for (int i = 0; i < tab.length; i++) {
+	    /*
+	     * lettres = new ArrayList<String>();
+	     * 
+	     * for (int j = i; j < tab.length; j++) { lettres.add(tab[j]); if
+	     * (accept2(e, lettres, a)) { return true; } }
+	     */
+
+	    if ((i < (tab.length - 1)) && tab[i].equals("\\")) {
+		lettres.add("\\" + tab[i + 1]);
+		i++;
+	    } else {
+		lettres.add(tab[i]);
+	    }
+
+	}
+
+	return accept2(e, lettres, a);
+
+	// return false;
+    }
+
+    @SuppressWarnings("unchecked")
+    public static boolean accept2(Etat e, ArrayList<String> lettres, Automate a) {
 
 	/* Si liste vide et etat final ok sinon ko */
 	if (lettres.isEmpty()) {
@@ -87,7 +114,7 @@ public class Automate implements Serializable {
 		Etat.getNextEtats(e, null, eps);
 
 		for (Etat n : eps) {
-		    if (accept(n, (ArrayList<String>) lettres.clone(), a))
+		    if (accept2(n, (ArrayList<String>) lettres.clone(), a))
 			return true;
 		}
 
@@ -104,7 +131,7 @@ public class Automate implements Serializable {
 		return false;
 	    } else {
 		lettres.remove(0);
-		if (accept(e, (ArrayList<String>) lettres.clone(), a))
+		if (accept2(e, (ArrayList<String>) lettres.clone(), a))
 		    return true;
 	    }
 	} else if (l.equals("$")) {
@@ -126,7 +153,7 @@ public class Automate implements Serializable {
 	/* cas epsilon transition */
 	for (Etat n : epsilon) {
 	    /* on continue le parcours de l'automate */
-	    if (accept(n, (ArrayList<String>) lettres.clone(), a))
+	    if (accept2(n, (ArrayList<String>) lettres.clone(), a))
 		return true;
 	}
 
@@ -135,7 +162,7 @@ public class Automate implements Serializable {
 
 	for (Etat n : next) {
 	    /* on continue le parcours de l'automate */
-	    if (accept(n, (ArrayList<String>) lettres.clone(), a))
+	    if (accept2(n, (ArrayList<String>) lettres.clone(), a))
 		return true;
 	}
 

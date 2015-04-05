@@ -9,7 +9,7 @@ import Automate.Etat;
 import Automate.Factory;
 %}
 
-%token LPAREN RPAREN PIPE LBRACES RBRACES LBRACKET RBRACKET
+%token LPAREN RPAREN PIPE LBRACES RBRACES LBRACKET RBRACKET QUOTED_CHAR
 %token POINT STAR PLUS QUESTIONMARK CHAR DOLLAR FIRST BACKSLASH DIGIT
 %start  extended_reg_exp
 
@@ -25,30 +25,34 @@ import Automate.Factory;
    Bracket Expression
    -------------------------------------------
 */
-bracket_expression : LBRACKET matching_list RBRACKET   { $$ = null; }
+bracket_expression : LBRACKET matching_list RBRACKET   {
+                        $$ = (ArrayList<Automate>) Factory.creerAutomatesMatchingList((ArrayList<String) $2); }
                | LBRACKET nonmatching_list RBRACKET    { $$ = null; }
                ;
-matching_list  : bracket_list    { $$ = null; }
+matching_list  : bracket_list    { $$ = (ArrayList<String>) $1; }
                ;
-nonmatching_list : FIRST bracket_list    {}
+nonmatching_list : FIRST bracket_list    { $$ = (ArrayList<String>) $2; }
                ;
 bracket_list   : follow_list    {}
                | follow_list '-'    {}
                ;
-follow_list    :             expression_term {}
-               | follow_list expression_term {}
+follow_list    :             expression_term { $$ = (ArrayList<String>) $1; }
+               | follow_list expression_term { $$ = ((ArrayList<String>) $1).addAll((ArrayList<String>) $2); }
                ;
-expression_term : single_expression {}
-               | range_expression {}
+expression_term : single_expression { $$ = (ArrayList<String>) $1; }
+               | range_expression { $$ = (ArrayList<String>) $1; }
                ;
-single_expression : end_range {}
+single_expression : end_range { $$ = (ArrayList<String>) $1; }
                ;
 range_expression : start_range end_range {}
                | start_range '-' {}
                ;
-start_range    : end_range '-' {}
+start_range    : end_range '-' { $$ = (ArrayList<String>) $1; }
                ;
-end_range      : CHAR {}
+end_range      : CHAR { ArrayList<String> ls = new ArrayList<String>();
+                        ls.add((String) $1);
+                        $$ = (ArrayList<String>) ls;
+               }
                ;
 
 /* --------------------------------------------
@@ -59,7 +63,7 @@ end_range      : CHAR {}
 extended_reg_exp   :                       ERE_branch    { auto = (Automate) $1; }
                    | extended_reg_exp PIPE ERE_branch    {
 		     auto = (Automate) Factory.union((Automate) $1,
-						  (Automate) $3);
+						     (Automate) $3);
                    }
                    ;
 ERE_branch         :            ERE_expression    { $$ = (Automate) $1; }
@@ -76,9 +80,14 @@ ERE_expression     : one_char_or_coll_elem_ERE    { $$ = (Automate) $1; }
                                                                                                  (String) $2); }
                    ;
 one_char_or_coll_elem_ERE  : CHAR          { $$ = (Automate) Factory.creerAutomate(new String($1)); }
-                   | QUOTED_CHAR           { $$ = (Automate) Factory.creerAutomate(new String($1)); }
+                   | QUOTED_CHAR           {
+                       if(((String) $1).equals("\\."))
+                           $$ = (Automate) Factory.creerAutomate((String) $1);
+                       else
+                           $$ = (Automate) Factory.creerAutomate(new String($1.charAt(1)));
+                   }
                    | POINT                 { $$ = (Automate) Factory.creerAutomate(new String(".")); }
-                   | bracket_expression    { $$ - (Automate) $1; }
+                   | bracket_expression    { $$ = (Automate) $1; }
                    ;
 ERE_dupl_symbol    : STAR                               { $$ = (String) new String("*"); }
                    | PLUS                               { $$ = (String) new String("+"); }
@@ -128,11 +137,6 @@ public static void main(String args[]) throws IOException {
   
   String txt = args[args.length - 1];
   
-  ArrayList<String> lettres = new ArrayList<String>();
-  
-  for (int j = 0; j < txt.length(); j++)
-    lettres.add("" + txt.charAt(j));
-  
   Parser yyparser = null;
   if (args.length > 0) {
     // parse a file
@@ -147,7 +151,7 @@ public static void main(String args[]) throws IOException {
       
       boolean result;
       
-      result = Automate.accept(auto.getInitial(), lettres, auto);
+      result = Automate.accept(auto.getInitial(), txt, auto);
       
       System.out.println("Résultat : " + result);
       

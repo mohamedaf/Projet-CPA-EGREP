@@ -46,6 +46,9 @@ public class Etat implements Serializable {
 		    arrivees.add(t.getArrivee());
 	    }
 	} else {
+	    if ((c != null) && c.equals("\\."))
+		c = new String(".");
+
 	    for (Transition t : depart.getTransitionsList()) {
 		if (t.getCaractere().equals("eps"))
 		    epsilon.add(t.getArrivee());

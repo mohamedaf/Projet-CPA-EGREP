@@ -64,6 +64,10 @@ NL = \n | \r | \r\n
 "?"            {System.out.println("QUESTIONMARK");
                 return Parser.QUESTIONMARK;}
 
+"\\^" | "\\$" | "\\(" | "\\)" | "\\|" | "\\\\" | "\\[" | "\\]" | "\\{" | "\\}" | "\\*" | "\\+" | "\\?" {
+    yyparser.yylval = new ParserVal(yytext());
+    return Parser.QUOTED_CHAR;}
+
 [[:digit:]]+   {System.out.println("DIGIT");
 				yyParser.yylval = new ParserVal(Integer.parseInt(yytext()));
                 return Parser.DIGIT;}
