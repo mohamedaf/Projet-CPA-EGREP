@@ -269,10 +269,9 @@ public class Factory {
 	return res;
     }
 
-    /**************************************************************************/
-    /* Essayer de faire fonctionner EGREP pour non deterministe avant de ***** */
-    /*********************** passer a cette partie ****************************/
-    /**************************************************************************/
+    /*************************************************************************/
+    /*************************************************************************/
+    /*************************************************************************/
 
     /*
      * Prend un automate non deterministe et retourne une minimisation de cet
@@ -284,22 +283,39 @@ public class Factory {
     }
 
     /* Verifie que l'automate est complet */
-    public static Boolean estAutomateComplet(Automate a) {
-	/* TO DO */
-	return false;
+    public static Boolean estAutomateComplet(Automate a, Etat e) {
+
+	ArrayList<Etat> next;
+	ArrayList<Etat> epsilon = new ArrayList<Etat>();
+
+	for (String s : a.getAlphabetList()) {
+	    next = Etat.getNextEtats(e, s, epsilon);
+
+	    /* Pas de transition pour cette lettre */
+	    if (next == null)
+		return false;
+	    else {
+		for (Etat es : epsilon) {
+		    /* Si false retournee pas besoin de continuer */
+		    if (!estAutomateComplet(a, es)) {
+			return false;
+		    }
+		}
+
+		for (Etat es : next) {
+		    /* Si false retournee pas besoin de continuer */
+		    if (!estAutomateComplet(a, es)) {
+			return false;
+		    }
+		}
+	    }
+	}
+
+	return true;
     }
 
     /* Supprime les epsilon transitions dans l'automate */
     public static Automate removeEpsilonTransition(Automate a) {
-	/* TO DO */
-	return null;
-    }
-
-    /*
-     * Retourne l'automate reconaissant le langage mirroir de l'automate donnee
-     * en argument
-     */
-    public static Automate getAutomateMirroir(Automate a) {
 	/* TO DO */
 	return null;
     }
