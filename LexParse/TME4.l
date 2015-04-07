@@ -37,9 +37,6 @@ NL = \n | \r | \r\n
 "|"            {System.out.println("PIPE");
                 return Parser.PIPE;}
 
-"\\"           {System.out.println("BACKSLASH");
-                return Parser.BACKSLASH;}
-
 "["            {System.out.println("LBRACKET");
                 return Parser.LBRACKET;}
 

@@ -33,19 +33,20 @@ public class Yylex {
    * Translates characters to character classes
    */
   private static final String ZZ_CMAP_PACKED = 
-    "\12\0\1\1\2\0\1\2\26\0\1\4\3\0\1\5\1\6\1\16"+
-    "\1\17\2\0\1\15\1\0\12\21\3\0\1\22\1\0\1\20\1\0"+
-    "\32\22\1\11\1\10\1\12\1\3\1\22\1\0\32\22\1\13\1\7"+
-    "\1\14\u05e2\0\12\21\206\0\12\21\306\0\12\21\u019c\0\12\21\166\0"+
-    "\12\21\166\0\12\21\166\0\12\21\166\0\12\21\166\0\12\21\166\0"+
-    "\12\21\166\0\12\21\166\0\12\21\166\0\12\21\140\0\12\21\166\0"+
-    "\12\21\106\0\12\21\u0116\0\12\21\106\0\12\21\u0746\0\12\21\46\0"+
-    "\12\21\u012c\0\12\21\200\0\12\21\246\0\12\21\6\0\12\21\266\0"+
-    "\12\21\126\0\12\21\206\0\12\21\6\0\12\21\u89c6\0\12\21\u02a6\0"+
-    "\12\21\46\0\12\21\306\0\12\21\26\0\12\21\126\0\12\21\u0196\0"+
-    "\12\21\u5316\0\12\21\u0586\0\12\21\u0bbc\0\12\21\200\0\12\21\74\0"+
-    "\12\21\220\0\12\21\u0116\0\12\21\u01d6\0\12\21\u0176\0\12\21\146\0"+
-    "\12\21\u0216\0\12\21\u5176\0\12\21\346\0\12\21\u6c74\0\62\21\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\u280f\0";
+    "\12\0\1\1\2\0\1\2\26\0\1\5\3\0\1\6\1\7\1\15"+
+    "\1\16\1\0\1\21\1\20\1\0\12\22\3\0\1\23\1\0\1\17"+
+    "\1\0\32\23\1\11\1\3\1\12\1\4\1\23\1\0\32\23\1\13"+
+    "\1\10\1\14\u05e2\0\12\22\206\0\12\22\306\0\12\22\u019c\0\12\22"+
+    "\166\0\12\22\166\0\12\22\166\0\12\22\166\0\12\22\166\0\12\22"+
+    "\166\0\12\22\166\0\12\22\166\0\12\22\166\0\12\22\140\0\12\22"+
+    "\166\0\12\22\106\0\12\22\u0116\0\12\22\106\0\12\22\u0746\0\12\22"+
+    "\46\0\12\22\u012c\0\12\22\200\0\12\22\246\0\12\22\6\0\12\22"+
+    "\266\0\12\22\126\0\12\22\206\0\12\22\6\0\12\22\u89c6\0\12\22"+
+    "\u02a6\0\12\22\46\0\12\22\306\0\12\22\26\0\12\22\126\0\12\22"+
+    "\u0196\0\12\22\u5316\0\12\22\u0586\0\12\22\u0bbc\0\12\22\200\0\12\22"+
+    "\74\0\12\22\220\0\12\22\u0116\0\12\22\u01d6\0\12\22\u0176\0\12\22"+
+    "\146\0\12\22\u0216\0\12\22\u5176\0\12\22\346\0\12\22\u6c74\0\62\22"+
+    "\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\u280f\0";
 
   /** 
    * Translates characters to character classes
@@ -60,10 +61,10 @@ public class Yylex {
   private static final String ZZ_ACTION_PACKED_0 =
     "\1\0\2\1\1\2\1\3\1\4\1\5\1\6\1\7"+
     "\1\10\1\11\1\12\1\13\1\14\1\15\1\16\1\17"+
-    "\1\20\1\21";
+    "\1\20\1\21\1\22\1\23";
 
   private static int [] zzUnpackAction() {
-    int [] result = new int[19];
+    int [] result = new int[21];
     int offset = 0;
     offset = zzUnpackAction(ZZ_ACTION_PACKED_0, offset, result);
     return result;
@@ -88,12 +89,12 @@ public class Yylex {
   private static final int [] ZZ_ROWMAP = zzUnpackRowMap();
 
   private static final String ZZ_ROWMAP_PACKED_0 =
-    "\0\0\0\23\0\46\0\23\0\23\0\23\0\23\0\23"+
-    "\0\23\0\23\0\23\0\23\0\23\0\23\0\23\0\23"+
-    "\0\23\0\71\0\23";
+    "\0\0\0\24\0\50\0\74\0\24\0\24\0\24\0\24"+
+    "\0\24\0\24\0\24\0\24\0\24\0\24\0\24\0\24"+
+    "\0\24\0\24\0\120\0\24\0\24";
 
   private static int [] zzUnpackRowMap() {
-    int [] result = new int[19];
+    int [] result = new int[21];
     int offset = 0;
     offset = zzUnpackRowMap(ZZ_ROWMAP_PACKED_0, offset, result);
     return result;
@@ -118,10 +119,11 @@ public class Yylex {
   private static final String ZZ_TRANS_PACKED_0 =
     "\1\0\1\2\1\3\1\4\1\5\1\6\1\7\1\10"+
     "\1\11\1\12\1\13\1\14\1\15\1\16\1\17\1\20"+
-    "\1\21\1\22\1\23\24\0\1\2\42\0\1\22\1\0";
+    "\1\21\1\22\1\23\1\24\25\0\1\2\25\0\15\25"+
+    "\26\0\1\23\1\0";
 
   private static int [] zzUnpackTrans() {
-    int [] result = new int[76];
+    int [] result = new int[100];
     int offset = 0;
     offset = zzUnpackTrans(ZZ_TRANS_PACKED_0, offset, result);
     return result;
@@ -159,10 +161,10 @@ public class Yylex {
   private static final int [] ZZ_ATTRIBUTE = zzUnpackAttribute();
 
   private static final String ZZ_ATTRIBUTE_PACKED_0 =
-    "\1\0\1\11\1\1\16\11\1\1\1\11";
+    "\1\0\1\11\2\1\16\11\1\1\2\11";
 
   private static int [] zzUnpackAttribute() {
-    int [] result = new int[19];
+    int [] result = new int[21];
     int offset = 0;
     offset = zzUnpackAttribute(ZZ_ATTRIBUTE_PACKED_0, offset, result);
     return result;
@@ -266,7 +268,7 @@ public Yylex(java.io.Reader r, Parser yyParser){
     char [] map = new char[0x110000];
     int i = 0;  /* index in packed string  */
     int j = 0;  /* index in unpacked array */
-    while (i < 290) {
+    while (i < 292) {
       int  count = packed.charAt(i++);
       char value = packed.charAt(i++);
       do map[j++] = value; while (--count > 0);
@@ -569,89 +571,99 @@ public Yylex(java.io.Reader r, Parser yyParser){
         case 1: 
           { System.out.println("NL");
           }
-        case 18: break;
-        case 2: 
-          { System.out.println("FIRST");
-                return Parser.FIRST;
-          }
-        case 19: break;
-        case 3: 
-          { System.out.println("DOLLAR");
-                return Parser.DOLLAR;
-          }
         case 20: break;
-        case 4: 
-          { System.out.println("LPAREN");
-                return Parser.LPAREN;
-          }
-        case 21: break;
-        case 5: 
-          { System.out.println("RPAREN");
-                return Parser.RPAREN;
-          }
-        case 22: break;
-        case 6: 
-          { System.out.println("PIPE");
-                return Parser.PIPE;
-          }
-        case 23: break;
-        case 7: 
+        case 2: 
           { System.out.println("BACKSLASH");
                 return Parser.BACKSLASH;
           }
+        case 21: break;
+        case 3: 
+          { System.out.println("FIRST");
+                return Parser.FIRST;
+          }
+        case 22: break;
+        case 4: 
+          { System.out.println("DOLLAR");
+                return Parser.DOLLAR;
+          }
+        case 23: break;
+        case 5: 
+          { System.out.println("LPAREN");
+                return Parser.LPAREN;
+          }
         case 24: break;
+        case 6: 
+          { System.out.println("RPAREN");
+                return Parser.RPAREN;
+          }
+        case 25: break;
+        case 7: 
+          { System.out.println("PIPE");
+                return Parser.PIPE;
+          }
+        case 26: break;
         case 8: 
           { System.out.println("LBRACKET");
                 return Parser.LBRACKET;
           }
-        case 25: break;
+        case 27: break;
         case 9: 
           { System.out.println("RBRACKET");
                 return Parser.RBRACKET;
           }
-        case 26: break;
+        case 28: break;
         case 10: 
           { System.out.println("LBRACES");
                 return Parser.LBRACES;
           }
-        case 27: break;
+        case 29: break;
         case 11: 
           { System.out.println("RBRACES");
                 return Parser.RBRACES;
           }
-        case 28: break;
+        case 30: break;
         case 12: 
-          { System.out.println("POINT");
-                return Parser.POINT;
-          }
-        case 29: break;
-        case 13: 
           { System.out.println("STAR");
                 return Parser.STAR;
           }
-        case 30: break;
-        case 14: 
+        case 31: break;
+        case 13: 
           { System.out.println("PLUS");
                 return Parser.PLUS;
           }
-        case 31: break;
-        case 15: 
+        case 32: break;
+        case 14: 
           { System.out.println("QUESTIONMARK");
                 return Parser.QUESTIONMARK;
           }
-        case 32: break;
+        case 33: break;
+        case 15: 
+          { System.out.println("POINT");
+                return Parser.POINT;
+          }
+        case 34: break;
         case 16: 
+          { return (int) yycharat(0);
+          }
+        case 35: break;
+        case 17: 
           { System.out.println("DIGIT");
 				yyParser.yylval = new ParserVal(Integer.parseInt(yytext()));
                 return Parser.DIGIT;
           }
-        case 33: break;
-        case 17: 
+        case 36: break;
+        case 18: 
           { System.out.println("CHAR");
                 yyParser.yylval = new ParserVal(yytext());
                 return Parser.CHAR;
           }
-        case 34: break;
+        case 37: break;
+        case 19: 
+          { System.out.println(yytext());
+    yyParser.yylval = new ParserVal(yytext());
+    return Parser.QUOTED_CHAR;
+          }
+        case 38: break;
         default: 
           if (zzInput == YYEOF && zzStartRead == zzCurrentPos) {
             zzAtEOF = true;

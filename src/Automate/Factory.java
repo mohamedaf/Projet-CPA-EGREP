@@ -1,6 +1,7 @@
 package Automate;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashSet;
 
 public class Factory {
@@ -45,18 +46,6 @@ public class Factory {
 	finaux.add(initial);
 
 	return new Automate(initial, finaux, caracteres);
-    }
-
-    public static ArrayList<Automate> creerAutomatesMatchingList(
-	    ArrayList<String> ls) {
-
-	ArrayList<Automate> la = new ArrayList<Automate>();
-
-	for (String s : ls) {
-	    la.add(Factory.creerAutomate(s));
-	}
-
-	return la;
     }
 
     public static Automate concatenation(Automate a1, Automate a2) {
@@ -242,6 +231,41 @@ public class Factory {
 		return tmp;
 	    }
 	}
+    }
+
+    public static Automate creerAutomateFromMatchingList(Collection<String> ls) {
+
+	ArrayList<String> alphabet = new ArrayList<String>(ls);
+
+	/* Etats initial et final */
+	Etat initial = creerEtat();
+	Etat fin = creerEtat();
+
+	/* On ajoute des transitions de l'etat initial a l'etat final */
+	for (String s : ls) {
+	    initial.addTransition(creerTransition(initial, fin, s));
+	}
+
+	ArrayList<Etat> finaux = new ArrayList<Etat>();
+	finaux.add(fin);
+
+	return creerAutomate(initial, finaux, alphabet);
+    }
+
+    public static HashSet<String> getCharBetween(char origin, char dest) {
+	HashSet<String> res = new HashSet<String>();
+	for (char c = origin; c <= dest; c++) {
+	    res.add("" + c);
+	}
+	return res;
+    }
+
+    public static HashSet<String> getExtendedAsciiChar() {
+	HashSet<String> res = new HashSet<String>();
+	for (char c = 33; c <= 126; c++) {
+	    res.add("" + c);
+	}
+	return res;
     }
 
     /**************************************************************************/
