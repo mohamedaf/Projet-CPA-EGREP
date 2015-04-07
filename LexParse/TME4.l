@@ -22,47 +22,52 @@ NL = \n | \r | \r\n
 
 {NL} {System.out.println("NL");}
 
-"^"            {System.out.println("FIRST");
+"^"            {/*System.out.println("FIRST");*/
                 return Parser.FIRST;}
 
-"$"            {System.out.println("DOLLAR");
+"$"            {/*System.out.println("DOLLAR");*/
                 return Parser.DOLLAR;}
 
-"("            {System.out.println("LPAREN");
+"("            {/*System.out.println("LPAREN");*/
                 return Parser.LPAREN;}
 
-")"            {System.out.println("RPAREN");
+")"            {/*System.out.println("RPAREN");*/
                 return Parser.RPAREN;}
 
-"|"            {System.out.println("PIPE");
+"|"            {/*System.out.println("PIPE");*/
                 return Parser.PIPE;}
 
-"["            {System.out.println("LBRACKET");
+"["            {/*System.out.println("LBRACKET");*/
                 return Parser.LBRACKET;}
 
-"]"            {System.out.println("RBRACKET");
+"]"            {/*System.out.println("RBRACKET");*/
                 return Parser.RBRACKET;}
 
-"{"            {System.out.println("LBRACES");
+"{"            {/*System.out.println("LBRACES");*/
                 return Parser.LBRACES;}
 
-"}"            {System.out.println("RBRACES");
+"}"            {/*System.out.println("RBRACES");*/
                 return Parser.RBRACES;}
 
-"."            {System.out.println("POINT");
+"."            {/*System.out.println("POINT");*/
                 return Parser.POINT;}
 
-"*"            {System.out.println("STAR");
+"*"            {/*System.out.println("STAR");*/
                 return Parser.STAR;}
 
-"+"            {System.out.println("PLUS");
+"+"            {/*System.out.println("PLUS");*/
                 return Parser.PLUS;}
 
-"?"            {System.out.println("QUESTIONMARK");
+"?"            {/*System.out.println("QUESTIONMARK");*/
                 return Parser.QUESTIONMARK;}
 
+"\\"           {/*System.out.println("BACKSLASH");*/
+                return Parser.BACKSLASH;}
+
+"-"			   { return (int) yycharat(0); }
+
 "\\^" | "\\$" | "\\(" | "\\)" | "\\|" | "\\\\" | "\\[" | "\\]" | "\\{" | "\\}" | "\\*" | "\\+" | "\\?" {
-    yyparser.yylval = new ParserVal(yytext());
+    yyParser.yylval = new ParserVal(yytext());
     return Parser.QUOTED_CHAR;}
 
 [[:digit:]]+   {System.out.println("DIGIT");

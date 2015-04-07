@@ -260,10 +260,11 @@ public class Factory {
 	return res;
     }
 
-    public static HashSet<String> getExtendedAsciiChar() {
+    public static HashSet<String> getExtendedAsciiChar(HashSet<String> s) {
 	HashSet<String> res = new HashSet<String>();
 	for (char c = 33; c <= 126; c++) {
-	    res.add("" + c);
+	    if (!s.contains(String.valueOf(c)))
+		res.add(String.valueOf(c));
 	}
 	return res;
     }

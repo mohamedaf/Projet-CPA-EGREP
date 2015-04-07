@@ -11,7 +11,7 @@ import Automate.Factory;
 %}
 
 %token LPAREN RPAREN PIPE LBRACES RBRACES LBRACKET RBRACKET QUOTED_CHAR
-%token POINT STAR PLUS QUESTIONMARK CHAR DOLLAR FIRST DIGIT
+%token POINT STAR PLUS QUESTIONMARK CHAR DOLLAR FIRST DIGIT BACKSLASH
 %start  extended_reg_exp
 
 %type <sval> CHAR QUOTED_CHAR ERE_dupl_symbol
@@ -32,19 +32,20 @@ bracket_expression : LBRACKET matching_list RBRACKET   {
 						}
                         $$ = Factory.creerAutomateFromMatchingList((HashSet<String>) $2);
                 }
-               | LBRACKET nonmatching_list RBRACKET    { 
+               | LBRACKET nonmatching_list RBRACKET    {
 						$$ = Factory.creerAutomateFromMatchingList((HashSet<String>) $2);
                }
                ;
 matching_list  : bracket_list    { $$ = (HashSet<String>) $1; }
                ;
-nonmatching_list : FIRST bracket_list { HashSet<String> res = Factory.getExtendedAsciiChar();
-										res.remove((HashSet<String>) $2);
-										$$ = res; }
+nonmatching_list : FIRST bracket_list {
+                    $$ = (HashSet<String>) Factory.getExtendedAsciiChar((HashSet<String>) $2);
+               }
                ;
 bracket_list   : follow_list    { $$ = (HashSet<String>) $1; }
-               | follow_list '-'    { /*System.out.println("Bizarre");*/
-                                      $$ = (HashSet<String>) $1; }
+               | follow_list '-'    { HashSet<String> res = new HashSet<String>((HashSet<String>) $1);
+                       res.add(""+'-');
+                       $$ = (HashSet<String>) res; }
                ;
 follow_list    : expression_term { $$ = (HashSet<String>) $1; }
                | follow_list expression_term { HashSet<String> res = new HashSet<String>((HashSet<String>) $1);
@@ -55,35 +56,40 @@ follow_list    : expression_term { $$ = (HashSet<String>) $1; }
 expression_term : single_expression { $$ = (HashSet<String>) $1; }
                 | range_expression { $$ = (HashSet<String>) $1; }
                ;
-single_expression : end_range { HashSet<String> res = new HashSet<String>();
+single_expression : end_range { System.out.println("lalala"); HashSet<String> res = new HashSet<String>();
 								res.add("" + ((char) $1));
 								$$ = res;
-               }
+                    }
+		    | others {HashSet<String> res = new HashSet<String>();
+								res.add("" + ((char) $1));
+								$$ = res;
+		    }
                ;
 range_expression : start_range end_range { $$ = Factory.getCharBetween((char) $1, (char) $2); }
-               | start_range '-'         { $$ = Factory.getCharBetween((char) $1, (char) 126); }
+               /*| start_range '-'         { $$ = Factory.getCharBetween((char) $1, (char) 126); }*/
                ;
 start_range    : end_range '-' { System.out.println(8); $$ = (char) $1; }
                ;
 end_range      : CHAR         { System.out.println("ici"); $$ = (char) $1.charAt(0); }
-			   | DIGIT        { System.out.println(9);$$ = Character.toChars(48+$1)[0]; }
-               | QUOTED_CHAR  { /* pblm 2 carac distincts \+
-                                 */System.out.println(10);$$ = "" + $1.charAt(1); }
-               | FIRST        { $$ = "^"; }
-               | DOLLAR       { $$ = "$"; }
-               | STAR         { $$ = "*"; }
-               | PLUS         { $$ = "+"; }
-               | POINT        { $$ = "."; }
-               | QUESTIONMARK { $$ = "?"; }
-               | LPAREN       { $$ = "("; }
-               | RPAREN       { $$ = ")"; }
-               | PIPE         { $$ = "|"; }
-               | LBRACKET     { $$ = "["; }
-               | LBRACES      { $$ = "{"; }
-               | RBRACES      { $$ = "}"; }
+	       | DIGIT        { $$ = Character.toChars(48+$1)[0]; }
+               ;
+others         : '-' { $$ = '-'; }
+               | BACKSLASH    { System.out.println(10);$$ = '\\'; }
+               | FIRST        { $$ = '^'; }
+               | DOLLAR       { $$ = '$'; }
+               | STAR         { $$ = '*'; }
+               | PLUS         { $$ = '+'; }
+               | POINT        { $$ = '.'; }
+               | QUESTIONMARK { $$ = '?'; }
+               | LPAREN       { $$ = '('; }
+               | RPAREN       { $$ = ')'; }
+               | PIPE         { $$ = '|'; }
+               | LBRACKET     { $$ = '['; }
+               | LBRACES      { $$ = '{'; }
+               | RBRACES      { $$ = '}'; }
                ;
 /*FIRST DOLLAR LPAREN RPAREN PIPE BACKSLASH LBRACKET RBRACKET LBRACES RBRACES POINT STAR PLUS QUESTIONMARK*/
-			   
+
 /* --------------------------------------------
    Extended Regular Expression
    --------------------------------------------
@@ -163,33 +169,33 @@ static boolean interactive;
 
 public static void main(String args[]) throws IOException {
   System.out.println("Automate");
-  
+
   String txt = args[args.length - 1];
-  
+
   Parser yyparser = null;
   if (args.length > 0) {
     // parse a file
     for (int i = 0; i < args.length - 1; i++) {
-      
+
       System.out.println("Fichier " + args[i] + " : ");
-      
+
       auto = null;
-      
+
       yyparser = new Parser(new FileReader(args[i]));
       yyparser.yyparse();
-      
+
       boolean result;
-      
+
       result = Automate.accept(auto.getInitial(), txt, auto);
-      
-      System.out.println("Résultat : " + result);
-      
+
+      System.out.println("Resultat : " + result);
+
     }
   } else {
     // interactive mode
     System.out.println("No input file");
   }
-  
+
   System.out.println();
   System.out.println("....... Fin .......");
 }

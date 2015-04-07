@@ -229,26 +229,22 @@ public class AutomateEx {
     }
 
     public static void TestAutomate8() {
-	/* a*bt+r? */
+	/* sa*l+u?t */
 
-	Automate a1 = Factory.Star(Factory.creerAutomate(new String("a")));
-	Automate a2 = Factory.creerAutomate(new String("b"));
-	Automate a3 = Factory.Plus(Factory.creerAutomate(new String("t")));
+	Automate a1 = Factory.creerAutomate(new String("s"));
+	Automate a2 = Factory.Star(Factory.creerAutomate(new String("a")));
+	Automate a3 = Factory.Plus(Factory.creerAutomate(new String("l")));
 	Automate a4 = Factory.questionMark(Factory
-		.creerAutomate(new String("r")));
+		.creerAutomate(new String("u")));
+	Automate a5 = Factory.creerAutomate(new String("t"));
+	;
 
 	/* a1 -> a2 -> a3 -> a4 -> a5 */
-	Automate a = Factory.concatenation(Factory.concatenation(a1, a2),
-		Factory.concatenation(a3, a4));
+	Automate a = Factory.concatenation(
+		Factory.concatenation(Factory.concatenation(a1, a2),
+			Factory.concatenation(a3, a4)), a5);
 
-	ArrayList<String> texte = new ArrayList<String>();
-
-	// texte.add("a");
-	texte.add("b");
-	texte.add("t");
-	texte.add("r");
-
-	if (Automate.accept(a.getInitial(), "btr", a))
+	if (Automate.accept(a.getInitial(), "salut", a))
 	    System.out.println("youpie");
 	else
 	    System.out.println("erreur");

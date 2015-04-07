@@ -33,10 +33,10 @@ public class Yylex {
    * Translates characters to character classes
    */
   private static final String ZZ_CMAP_PACKED = 
-    "\12\0\1\1\2\0\1\2\26\0\1\5\3\0\1\6\1\7\1\15"+
-    "\1\16\1\0\1\21\1\20\1\0\12\22\3\0\1\23\1\0\1\17"+
-    "\1\0\32\23\1\11\1\3\1\12\1\4\1\23\1\0\32\23\1\13"+
-    "\1\10\1\14\u05e2\0\12\22\206\0\12\22\306\0\12\22\u019c\0\12\22"+
+    "\12\0\1\1\2\0\1\2\26\0\1\4\3\0\1\5\1\6\1\15"+
+    "\1\16\1\0\1\21\1\14\1\0\12\22\3\0\1\23\1\0\1\17"+
+    "\1\0\32\23\1\10\1\20\1\11\1\3\1\23\1\0\32\23\1\12"+
+    "\1\7\1\13\u05e2\0\12\22\206\0\12\22\306\0\12\22\u019c\0\12\22"+
     "\166\0\12\22\166\0\12\22\166\0\12\22\166\0\12\22\166\0\12\22"+
     "\166\0\12\22\166\0\12\22\166\0\12\22\166\0\12\22\140\0\12\22"+
     "\166\0\12\22\106\0\12\22\u0116\0\12\22\106\0\12\22\u0746\0\12\22"+
@@ -89,9 +89,9 @@ public class Yylex {
   private static final int [] ZZ_ROWMAP = zzUnpackRowMap();
 
   private static final String ZZ_ROWMAP_PACKED_0 =
-    "\0\0\0\24\0\50\0\74\0\24\0\24\0\24\0\24"+
+    "\0\0\0\24\0\50\0\24\0\24\0\24\0\24\0\24"+
     "\0\24\0\24\0\24\0\24\0\24\0\24\0\24\0\24"+
-    "\0\24\0\24\0\120\0\24\0\24";
+    "\0\74\0\24\0\120\0\24\0\24";
 
   private static int [] zzUnpackRowMap() {
     int [] result = new int[21];
@@ -119,8 +119,8 @@ public class Yylex {
   private static final String ZZ_TRANS_PACKED_0 =
     "\1\0\1\2\1\3\1\4\1\5\1\6\1\7\1\10"+
     "\1\11\1\12\1\13\1\14\1\15\1\16\1\17\1\20"+
-    "\1\21\1\22\1\23\1\24\25\0\1\2\25\0\15\25"+
-    "\26\0\1\23\1\0";
+    "\1\21\1\22\1\23\1\24\25\0\1\2\25\0\11\25"+
+    "\1\0\4\25\25\0\1\23\1\0";
 
   private static int [] zzUnpackTrans() {
     int [] result = new int[100];
@@ -161,7 +161,7 @@ public class Yylex {
   private static final int [] ZZ_ATTRIBUTE = zzUnpackAttribute();
 
   private static final String ZZ_ATTRIBUTE_PACKED_0 =
-    "\1\0\1\11\2\1\16\11\1\1\2\11";
+    "\1\0\1\11\1\1\15\11\1\1\1\11\1\1\2\11";
 
   private static int [] zzUnpackAttribute() {
     int [] result = new int[21];
@@ -573,53 +573,53 @@ public Yylex(java.io.Reader r, Parser yyParser){
           }
         case 20: break;
         case 2: 
-          { System.out.println("BACKSLASH");
-                return Parser.BACKSLASH;
-          }
-        case 21: break;
-        case 3: 
           { System.out.println("FIRST");
                 return Parser.FIRST;
           }
-        case 22: break;
-        case 4: 
+        case 21: break;
+        case 3: 
           { System.out.println("DOLLAR");
                 return Parser.DOLLAR;
           }
-        case 23: break;
-        case 5: 
+        case 22: break;
+        case 4: 
           { System.out.println("LPAREN");
                 return Parser.LPAREN;
           }
-        case 24: break;
-        case 6: 
+        case 23: break;
+        case 5: 
           { System.out.println("RPAREN");
                 return Parser.RPAREN;
           }
-        case 25: break;
-        case 7: 
+        case 24: break;
+        case 6: 
           { System.out.println("PIPE");
                 return Parser.PIPE;
           }
-        case 26: break;
-        case 8: 
+        case 25: break;
+        case 7: 
           { System.out.println("LBRACKET");
                 return Parser.LBRACKET;
           }
-        case 27: break;
-        case 9: 
+        case 26: break;
+        case 8: 
           { System.out.println("RBRACKET");
                 return Parser.RBRACKET;
           }
-        case 28: break;
-        case 10: 
+        case 27: break;
+        case 9: 
           { System.out.println("LBRACES");
                 return Parser.LBRACES;
           }
-        case 29: break;
-        case 11: 
+        case 28: break;
+        case 10: 
           { System.out.println("RBRACES");
                 return Parser.RBRACES;
+          }
+        case 29: break;
+        case 11: 
+          { System.out.println("POINT");
+                return Parser.POINT;
           }
         case 30: break;
         case 12: 
@@ -638,8 +638,7 @@ public Yylex(java.io.Reader r, Parser yyParser){
           }
         case 33: break;
         case 15: 
-          { System.out.println("POINT");
-                return Parser.POINT;
+          { return Parser.BACKSLASH;
           }
         case 34: break;
         case 16: 
@@ -659,8 +658,7 @@ public Yylex(java.io.Reader r, Parser yyParser){
           }
         case 37: break;
         case 19: 
-          { System.out.println(yytext());
-    yyParser.yylval = new ParserVal(yytext());
+          { yyParser.yylval = new ParserVal(yytext());
     return Parser.QUOTED_CHAR;
           }
         case 38: break;
