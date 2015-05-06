@@ -1,0 +1,5 @@
+digraph G {
+	0 -> 1 [label = "eps"];
+	1 -> 2 [label = "a"];
+	2 -> 0 [label = "eps"];
+}

@@ -1,0 +1,6 @@
+digraph G {
+	0 -> 1 [label = "r"];
+	1 -> 0 [label = "q"];
+	0 -> 2 [label = "s"];
+	2 -> 0 [label = "q"];
+}

@@ -1,0 +1,13 @@
+digraph G {
+	0 -> 1 [label = "a"];
+	1 -> 0 [label = "eps"];
+	1 -> 2 [label = "eps"];
+	2 -> 3 [label = "b"];
+	3 -> 4 [label = "c"];
+	4 -> 5 [label = "e"];
+	3 -> 5 [label = "d"];
+	2 -> 5 [label = "e"];
+	0 -> 6 [label = "a"];
+	6 -> 0 [label = "eps"];
+	6 -> 2 [label = "eps"];
+}

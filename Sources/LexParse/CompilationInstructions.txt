@@ -1,0 +1,2 @@
+jflex pour compiler le lexer
+byacc -J pour compiler le parser
